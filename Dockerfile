@@ -2,23 +2,18 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# install system dependencies
-RUN apt-get update && apt-get install -y \
-    git \
-    curl \
-    build-essential \
-    libffi-dev \
-    libssl-dev \
-    && rm -rf /var/lib/apt/lists/*
+# install git
+RUN apt-get update && apt-get install -y git
 
 # copy repo
 COPY . .
 
-# upgrade pip
-RUN pip install --upgrade pip setuptools wheel
+# move into classic agent
+WORKDIR /app/classic
 
-# install autogpt libs
-RUN pip install ./autogpt_platform/autogpt_libs
+# install dependencies
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
 
-# start autogpt
+# run the agent
 CMD ["python", "-m", "autogpt"]
