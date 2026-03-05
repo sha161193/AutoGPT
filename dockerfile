@@ -1,10 +1,10 @@
-FROM python:3.11
+FROM python:3.11-slim
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y git
+COPY . .
 
-RUN git clone https://github.com/Significant-Gravitas/AutoGPT.git .
+RUN apt-get update && apt-get install -y git
 
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
