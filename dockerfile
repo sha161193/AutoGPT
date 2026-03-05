@@ -4,9 +4,8 @@ WORKDIR /app
 
 COPY . .
 
-RUN apt-get update && apt-get install -y git
+RUN pip install poetry
 
-RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+RUN poetry install
 
-CMD ["python", "-m", "autogpt"]
+CMD ["poetry", "run", "python", "-m", "autogpt_platform"]
