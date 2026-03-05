@@ -1,11 +1,11 @@
 FROM python:3.11-slim
 
-WORKDIR /app
+WORKDIR autogpt_platform/autogpt_libs
 
 COPY . .
 
 RUN pip install poetry
 
-RUN poetry install
+RUN poetry install --no-interaction --no-ansi
 
 CMD ["poetry", "run", "python", "-m", "autogpt_platform"]
