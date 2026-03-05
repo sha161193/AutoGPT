@@ -1,11 +1,18 @@
 FROM python:3.11-slim
 
-WORKDIR autogpt_platform/autogpt_libs
+WORKDIR /app
 
+RUN apt-get update && apt-get install -y git
+
+# Copy dependency files first
+COPY autogpt_platform/autogpt_libs/pyproject.toml ./pyproject.toml
+
+RUN pip install --upgrade pip
+RUN pip install .
+
+# Copy the rest of the project
 COPY . .
 
-RUN pip install poetry
+EXPOSE 8000
 
-RUN poetry install --no-interaction --no-ansi
-
-CMD ["poetry", "run", "python", "-m", "autogpt_platform"]
+CMD ["python", "-m", "autogpt"]
