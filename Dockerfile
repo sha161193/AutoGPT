@@ -2,17 +2,26 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y git
+# System dependencies required by many python packages
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    build-essential \
+    libffi-dev \
+    libssl-dev \
+    && rm -rf /var/lib/apt/lists/*
 
-# Copy dependency files first
-COPY autogpt_platform/autogpt_libs/pyproject.toml ./pyproject.toml
-
-RUN pip install --upgrade pip
-RUN pip install .
-
-# Copy the rest of the project
+# Copy repo
 COPY . .
 
-EXPOSE 8000
+# Upgrade pip
+RUN pip install --upgrade pip setuptools wheel
 
+# Install AutoGPT libs from pyproject
+RUN pip install ./autogpt_platform/autogpt_libs
+
+# Install root project if needed
+RUN pip install -e .
+
+# Default start command
 CMD ["python", "-m", "autogpt"]
