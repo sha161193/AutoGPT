@@ -2,7 +2,7 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# System dependencies required by many python packages
+# install system dependencies
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -11,17 +11,14 @@ RUN apt-get update && apt-get install -y \
     libssl-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy repo
+# copy repo
 COPY . .
 
-# Upgrade pip
+# upgrade pip
 RUN pip install --upgrade pip setuptools wheel
 
-# Install AutoGPT libs from pyproject
+# install autogpt libs
 RUN pip install ./autogpt_platform/autogpt_libs
 
-# Install root project if needed
-RUN pip install -e .
-
-# Default start command
+# start autogpt
 CMD ["python", "-m", "autogpt"]
